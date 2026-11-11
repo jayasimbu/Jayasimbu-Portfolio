@@ -90,6 +90,7 @@ export const PROFILE = {
   contact: {
     name: 'Jayasimbu Jayamani',
     email: 'jayasimbu66@gmail.com',
+    gmailComposeUrl: 'https://mail.google.com/mail/?view=cm&fs=1&to=jayasimbu66@gmail.com',
     phone: '+91 96773 55463',
     whatsapp: '+919677355463',
     whatsappUrl: 'https://wa.me/919677355463?text=Hi%20Jayasimbu,%20I%20saw%20your%20portfolio!',

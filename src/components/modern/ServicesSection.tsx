@@ -41,10 +41,7 @@ export default function ServicesSection() {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <span className="font-['JetBrains_Mono'] text-xs text-[#ff6b4a] uppercase tracking-widest">
-            04 · What I Offer
-          </span>
-          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#f6ddd8] mt-3">
+          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#f6ddd8]">
             My <span className="gradient-text-primary">Services</span>
           </h2>
         </motion.div>

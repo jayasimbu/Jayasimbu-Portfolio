@@ -12,6 +12,7 @@ import {
   MessageSquare,
   Database,
   Loader2,
+  ExternalLink,
 } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '@/components/ui/Icons';
 import { PROFILE } from '@/data/portfolio-data';
@@ -29,7 +30,11 @@ export default function ContactSection({ onOpenResume }: ContactSectionProps) {
     message: '',
   });
   const [submitting, setSubmitting] = useState(false);
-  const [sentStatus, setSentStatus] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [sentStatus, setSentStatus] = useState<{
+    type: 'success' | 'gmail';
+    text: string;
+    gmailUrl?: string;
+  } | null>(null);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(PROFILE.contact.email);
@@ -69,15 +74,16 @@ export default function ContactSection({ onOpenResume }: ContactSectionProps) {
         message: '',
       });
     } catch {
-      // Fallback to mailto when static-hosted without backend API
       const emailSubject = encodeURIComponent(`[Portfolio Inquiry] ${formData.subject} - ${formData.name}`);
       const emailBody = encodeURIComponent(
         `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
       );
-      window.location.href = `mailto:${PROFILE.contact.email}?subject=${emailSubject}&body=${emailBody}`;
+      const gmailUrl = `${PROFILE.contact.gmailComposeUrl}&su=${emailSubject}&body=${emailBody}`;
+      window.open(gmailUrl, '_blank', 'noopener,noreferrer');
       setSentStatus({
-        type: 'success',
-        text: 'Opened your email client with your inquiry message.',
+        type: 'gmail',
+        text: 'Opened Gmail compose in a new tab so you can send without Outlook.',
+        gmailUrl,
       });
     } finally {
       setSubmitting(false);
@@ -95,14 +101,11 @@ export default function ContactSection({ onOpenResume }: ContactSectionProps) {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <span className="font-['JetBrains_Mono'] text-xs text-[#ff6b4a] uppercase tracking-widest">
-            09 · Get In Touch
-          </span>
-          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#f6ddd8] mt-3">
+          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#f6ddd8]">
             Contact <span className="gradient-text-primary">Me</span>
           </h2>
           <p className="text-sm sm:text-base text-[#e1bfb8] mt-4 max-w-lg mx-auto">
-            Interested in working together? Send a message directly to my MongoDB inbox or reach out via WhatsApp.
+            Interested in working together? Send a message directly to my MongoDB inbox or reach out via Gmail or WhatsApp.
           </p>
         </motion.div>
 
@@ -115,7 +118,7 @@ export default function ContactSection({ onOpenResume }: ContactSectionProps) {
             transition={{ duration: 0.55 }}
             className="space-y-5"
           >
-            {/* Email */}
+            {/* Email (Opens Gmail Web Compose, never Outlook) */}
             <div className="glass-card rounded-xl p-5 hover-lift flex items-center justify-between gap-4">
               <div className="flex items-center gap-4 overflow-hidden">
                 <div className="w-12 h-12 rounded-xl bg-[#ff6b4a]/10 flex items-center justify-center shrink-0">
@@ -123,10 +126,12 @@ export default function ContactSection({ onOpenResume }: ContactSectionProps) {
                 </div>
                 <div className="overflow-hidden">
                   <p className="font-['JetBrains_Mono'] text-[11px] text-[#e1bfb8] uppercase tracking-wider">
-                    Email
+                    Email (Gmail)
                   </p>
                   <a
-                    href={`mailto:${PROFILE.contact.email}`}
+                    href={PROFILE.contact.gmailComposeUrl}
+                    target="_blank"
+                    rel="noreferrer"
                     className="text-sm sm:text-base text-[#f6ddd8] hover:text-[#ff6b4a] transition-colors truncate block"
                   >
                     {PROFILE.contact.email}
@@ -335,13 +340,20 @@ export default function ContactSection({ onOpenResume }: ContactSectionProps) {
               </button>
 
               {sentStatus && (
-                <p
-                  className={`text-xs font-['JetBrains_Mono'] text-center pt-1 ${
-                    sentStatus.type === 'success' ? 'text-[#56d9d8]' : 'text-[#ffb4ab]'
-                  }`}
-                >
-                  {sentStatus.text}
-                </p>
+                <div className="text-xs font-['JetBrains_Mono'] text-center pt-1 text-[#56d9d8] space-y-2">
+                  <p>{sentStatus.text}</p>
+                  {sentStatus.gmailUrl && (
+                    <a
+                      href={sentStatus.gmailUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-[#ff6b4a] underline"
+                    >
+                      <span>Open Gmail Compose</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                </div>
               )}
             </form>
           </motion.div>

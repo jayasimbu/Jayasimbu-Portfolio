@@ -155,9 +155,11 @@ export default function HeroSection({ onOpenResume }: HeroSectionProps) {
                 <span>HackerRank</span>
               </a>
               <a
-                href={`mailto:${PROFILE.contact.email}`}
+                href={PROFILE.contact.gmailComposeUrl}
+                target="_blank"
+                rel="noreferrer"
                 className="w-10 h-10 rounded-full bg-[#352723] flex items-center justify-center text-[#e1bfb8] hover:text-[#ff6b4a] hover:bg-[#41312e] transition-all"
-                title="Email"
+                title="Email via Gmail"
               >
                 <Mail className="w-4 h-4" />
               </a>

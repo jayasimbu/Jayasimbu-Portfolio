@@ -33,10 +33,7 @@ export default function PhilosophySection() {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <span className="font-['JetBrains_Mono'] text-xs text-[#56d9d8] uppercase tracking-widest">
-            08 · My Approach
-          </span>
-          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#f6ddd8] mt-3">
+          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#f6ddd8]">
             Development <span className="gradient-text-tertiary">Philosophy</span>
           </h2>
         </motion.div>

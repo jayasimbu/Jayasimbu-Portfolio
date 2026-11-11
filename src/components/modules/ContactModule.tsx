@@ -22,7 +22,7 @@ const SOCIAL_LINKS = [
   {
     label: 'Email',
     icon: '◈',
-    url: `mailto:${PROFILE.contact.email}`,
+    url: PROFILE.contact.gmailComposeUrl,
     color: '#00F0FF',
     description: PROFILE.contact.email,
   },

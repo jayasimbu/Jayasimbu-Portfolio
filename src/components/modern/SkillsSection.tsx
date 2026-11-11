@@ -56,10 +56,7 @@ export default function SkillsSection({ skillCategories = SKILL_CATEGORIES }: Sk
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <span className="font-['JetBrains_Mono'] text-xs text-[#7bd0ff] uppercase tracking-widest">
-            02 · My Expertise
-          </span>
-          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#f6ddd8] mt-3">
+          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#f6ddd8]">
             Technical <span className="gradient-text-secondary">Skills</span>
           </h2>
         </motion.div>

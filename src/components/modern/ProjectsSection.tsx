@@ -33,10 +33,7 @@ export default function ProjectsSection({ projects = PROJECTS }: ProjectsSection
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <span className="font-['JetBrains_Mono'] text-xs text-[#56d9d8] uppercase tracking-widest">
-            03 · My Work
-          </span>
-          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#f6ddd8] mt-3">
+          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-[#f6ddd8]">
             Featured <span className="gradient-text-tertiary">Projects</span>
           </h2>
         </motion.div>

@@ -74,9 +74,11 @@ export default function Footer() {
                 <LinkedinIcon className="w-4 h-4" />
               </a>
               <a
-                href={`mailto:${PROFILE.contact.email}`}
+                href={PROFILE.contact.gmailComposeUrl}
+                target="_blank"
+                rel="noreferrer"
                 className="p-2.5 rounded-xl bg-[#2a1c19] border border-[#59413c]/40 hover:border-[#ff6b4a] text-[#e1bfb8] hover:text-[#ff6b4a] transition-all"
-                title="Email"
+                title="Email via Gmail"
               >
                 <Mail className="w-4 h-4" />
               </a>
