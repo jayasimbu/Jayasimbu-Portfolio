@@ -1,65 +1,164 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  MessageSquare,
+  Monitor,
+  ArrowUp,
+} from 'lucide-react';
+import { PROFILE } from '@/data/portfolio-data';
+import Navbar from '@/components/modern/Navbar';
+import HeroSection from '@/components/modern/HeroSection';
+import AboutSection from '@/components/modern/AboutSection';
+import SkillsSection from '@/components/modern/SkillsSection';
+import ProjectsSection from '@/components/modern/ProjectsSection';
+import AIPlaygroundSection from '@/components/modern/AIPlaygroundSection';
+import ServicesSection from '@/components/modern/ServicesSection';
+import ExperienceSection from '@/components/modern/ExperienceSection';
+import EducationSection from '@/components/modern/EducationSection';
+import CertificationsSection from '@/components/modern/CertificationsSection';
+import PhilosophySection from '@/components/modern/PhilosophySection';
+import ContactSection from '@/components/modern/ContactSection';
+import Footer from '@/components/modern/Footer';
+import ResumeModal from '@/components/modern/ResumeModal';
+import DesktopOS from '@/components/desktop/DesktopOS';
 
 export default function Home() {
+  const [isOsMode, setIsOsMode] = useState(false);
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (isOsMode) {
+      document.body.classList.add('os-mode-active');
+    } else {
+      document.body.classList.remove('os-mode-active');
+    }
+  }, [isOsMode]);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="min-h-screen bg-[#1d100e] text-[#f6ddd8] relative selection:bg-[#ff6b4a]/25 selection:text-[#f6ddd8]">
+      <AnimatePresence mode="wait">
+        {isOsMode ? (
+          <motion.div
+            key="os"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="fixed inset-0 z-50"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            <DesktopOS onExitOS={() => setIsOsMode(false)} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="web"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="relative"
+          >
+            {/* Subtle Ambient Grid */}
+            <div className="fixed inset-0 grid-bg opacity-40 pointer-events-none" />
+
+            {/* Navigation Bar */}
+            <Navbar
+              onOpenResume={() => setIsResumeOpen(true)}
+              isOsMode={isOsMode}
+              onToggleOsMode={() => setIsOsMode(true)}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+
+            {/* Main Portfolio Sections */}
+            <main className="relative z-10">
+              <HeroSection onOpenResume={() => setIsResumeOpen(true)} />
+
+              <div className="section-divider max-w-7xl mx-auto" />
+              <AboutSection />
+
+              <div className="section-divider max-w-7xl mx-auto" />
+              <SkillsSection />
+
+              <div className="section-divider max-w-7xl mx-auto" />
+              <ProjectsSection />
+
+              <div className="section-divider max-w-7xl mx-auto" />
+              <AIPlaygroundSection />
+
+              <div className="section-divider max-w-7xl mx-auto" />
+              <ServicesSection />
+
+              <div className="section-divider max-w-7xl mx-auto" />
+              <ExperienceSection />
+
+              <div className="section-divider max-w-7xl mx-auto" />
+              <EducationSection />
+
+              <div className="section-divider max-w-7xl mx-auto" />
+              <CertificationsSection />
+
+              <div className="section-divider max-w-7xl mx-auto" />
+              <PhilosophySection />
+
+              <div className="section-divider max-w-7xl mx-auto" />
+              <ContactSection onOpenResume={() => setIsResumeOpen(true)} />
+            </main>
+
+            <Footer />
+
+            {/* Floating Quick Action Bar */}
+            <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-2.5 items-end">
+              <a
+                href={PROFILE.contact.whatsappUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#00acab] text-[#003939] font-['JetBrains_Mono'] font-bold text-xs shadow-lg hover:opacity-90 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                title="Chat on WhatsApp"
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span className="hidden sm:inline">WhatsApp</span>
+              </a>
+
+              <button
+                onClick={() => setIsOsMode(true)}
+                className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#2a1c19]/90 border border-[#7bd0ff]/40 text-[#7bd0ff] font-['JetBrains_Mono'] text-xs backdrop-blur-md shadow-lg hover:border-[#7bd0ff] hover:bg-[#352723] hover:scale-105 transition-all cursor-pointer"
+                title="Switch to Cyberpunk OS Desktop"
+              >
+                <Monitor className="w-4 h-4" />
+                <span className="hidden sm:inline">OS Mode</span>
+              </button>
+
+              {showScrollTop && (
+                <button
+                  onClick={scrollToTop}
+                  className="p-3 rounded-full bg-[#2a1c19]/90 border border-[#ff6b4a]/40 text-[#ff6b4a] backdrop-blur-md shadow-lg hover:bg-[#ff6b4a] hover:text-[#661000] transition-all cursor-pointer"
+                  title="Scroll to Top"
+                >
+                  <ArrowUp className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            <ResumeModal
+              isOpen={isResumeOpen}
+              onClose={() => setIsResumeOpen(false)}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

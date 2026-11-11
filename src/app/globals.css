@@ -1,26 +1,231 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════
+   PORTFOLIO — Jayasimbu Jayamani Design System
+   Stitch Editorial Dark Palette · Space Grotesk + Inter + JetBrains Mono
+   ═══════════════════════════════════════════ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --surface: #1d100e;
+  --surface-lowest: #170b09;
+  --surface-low: #261815;
+  --surface-container: #2a1c19;
+  --surface-high: #352723;
+  --surface-highest: #41312e;
+  --primary: #ffb4a3;
+  --primary-container: #ff6b4a;
+  --on-primary-container: #661000;
+  --secondary: #7bd0ff;
+  --secondary-fixed: #c4e7ff;
+  --tertiary: #56d9d8;
+  --tertiary-container: #00acab;
+  --on-tertiary-container: #003939;
+  --on-surface: #f6ddd8;
+  --on-surface-variant: #e1bfb8;
+  --outline: #a88a83;
+  --outline-variant: #59413c;
+  --error: #ffb4ab;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--surface);
+  --color-foreground: var(--on-surface);
+  --color-primary: var(--primary);
+  --color-primary-container: var(--primary-container);
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Space Grotesk', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ═══════ Base ═══════ */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: var(--surface);
+  color: var(--on-surface);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.os-mode-active {
+  overflow: hidden;
+}
+
+::selection {
+  background: rgba(255, 107, 74, 0.28);
+  color: #f6ddd8;
+}
+
+/* ═══════ Scrollbar ═══════ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #170b09;
+}
+::-webkit-scrollbar-thumb {
+  background: #59413c;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a88a83;
+}
+
+/* ═══════ Glass Surface & Cards ═══════ */
+
+.glass {
+  background: rgba(42, 28, 25, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(89, 65, 60, 0.45);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card {
+  background: rgba(42, 28, 25, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(89, 65, 60, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(255, 107, 74, 0.35);
+}
+
+/* ═══════ Ambient Glows & Hover Lift ═══════ */
+
+.glow-primary {
+  box-shadow: 0 0 60px rgba(255, 107, 74, 0.14), 0 0 120px rgba(255, 107, 74, 0.05);
+}
+
+.glow-secondary {
+  box-shadow: 0 0 60px rgba(123, 208, 255, 0.12), 0 0 120px rgba(123, 208, 255, 0.04);
+}
+
+.glow-tertiary {
+  box-shadow: 0 0 60px rgba(86, 217, 216, 0.12), 0 0 120px rgba(86, 217, 216, 0.04);
+}
+
+.profile-glow {
+  box-shadow: 0 0 40px rgba(255, 107, 74, 0.28), 0 0 80px rgba(255, 107, 74, 0.1);
+}
+
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* ═══════ Gradient Text ═══════ */
+
+.gradient-text-primary {
+  background: linear-gradient(135deg, #ff6b4a, #ffb4a3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-secondary {
+  background: linear-gradient(135deg, #7bd0ff, #c4e7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-tertiary {
+  background: linear-gradient(135deg, #56d9d8, #76f6f4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #59413c, transparent);
+}
+
+/* ═══════ Grid & Retro OS Compatibility ═══════ */
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 107, 74, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 107, 74, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.scanline-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0, 240, 255, 0.008) 2px, rgba(0, 240, 255, 0.008) 4px
+  );
+  opacity: 0.5;
+}
+
+.noise-overlay {
+  position: fixed;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+.window-active {
+  box-shadow:
+    0 0 0 1px rgba(0, 240, 255, 0.25),
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(0, 240, 255, 0.05);
+}
+
+.window-inactive {
+  box-shadow:
+    0 0 0 1px rgba(0, 240, 255, 0.08),
+    0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+/* ═══════ Print Styles for Resume ═══════ */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
 }
