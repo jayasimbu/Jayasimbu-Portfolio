@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { ArrowUp, Mail, Phone } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '@/components/ui/Icons';
 import { PROFILE } from '@/data/portfolio-data';
@@ -102,11 +103,19 @@ export default function Footer() {
         {/* Bottom */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#a88a83]">
           <span>© 2026 Jayasimbu Jayamani. All rights reserved.</span>
-          <span>
-            Crafted with <span className="text-[#ff6b4a] font-medium">Next.js</span>,{' '}
-            <span className="text-[#7bd0ff] font-medium">React</span> &amp;{' '}
-            <span className="text-[#56d9d8] font-medium">TypeScript</span>
-          </span>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/admin"
+              className="font-['JetBrains_Mono'] text-[11px] text-[#a88a83] hover:text-[#ff6b4a] transition-colors"
+            >
+              DB Admin
+            </Link>
+            <span>
+              Crafted with <span className="text-[#ff6b4a] font-medium">Next.js</span>,{' '}
+              <span className="text-[#7bd0ff] font-medium">MongoDB</span> &amp;{' '}
+              <span className="text-[#56d9d8] font-medium">TypeScript</span>
+            </span>
+          </div>
         </div>
       </div>
     </footer>

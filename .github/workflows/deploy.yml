@@ -30,7 +30,9 @@ jobs:
       - name: Build static export
         env:
           GITHUB_PAGES: "true"
-        run: npm run build
+        run: |
+          rm -rf src/app/api
+          npm run build
       - name: Add .nojekyll for GitHub Pages
         run: touch out/.nojekyll
       - name: Upload artifact

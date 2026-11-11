@@ -11,7 +11,11 @@ import {
 import { PROJECTS, Project } from '@/data/portfolio-data';
 import ProjectModal from './ProjectModal';
 
-export default function ProjectsSection() {
+interface ProjectsSectionProps {
+  projects?: Project[];
+}
+
+export default function ProjectsSection({ projects = PROJECTS }: ProjectsSectionProps) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const glowClasses = ['glow-primary', 'glow-secondary', 'glow-tertiary'];
@@ -39,7 +43,7 @@ export default function ProjectsSection() {
 
         {/* Projects List */}
         <div className="space-y-10">
-          {PROJECTS.map((project, index) => {
+          {projects.map((project, index) => {
             const glowClass = glowClasses[index % glowClasses.length];
             const accentText = accentTextClasses[index % accentTextClasses.length];
             const linkHover = linkHoverClasses[index % linkHoverClasses.length];

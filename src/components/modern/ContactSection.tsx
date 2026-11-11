@@ -10,6 +10,8 @@ import {
   Copy,
   Check,
   MessageSquare,
+  Database,
+  Loader2,
 } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '@/components/ui/Icons';
 import { PROFILE } from '@/data/portfolio-data';
@@ -26,7 +28,8 @@ export default function ContactSection({ onOpenResume }: ContactSectionProps) {
     subject: 'Full Stack Web Development',
     message: '',
   });
-  const [sentStatus, setSentStatus] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [sentStatus, setSentStatus] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(PROFILE.contact.email);
@@ -34,19 +37,51 @@ export default function ContactSection({ onOpenResume }: ContactSectionProps) {
     setTimeout(() => setCopied(false), 2500);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
       return;
     }
 
-    const emailSubject = encodeURIComponent(`[Portfolio Inquiry] ${formData.subject} - ${formData.name}`);
-    const emailBody = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-    );
+    setSubmitting(true);
+    setSentStatus(null);
 
-    window.location.href = `mailto:${PROFILE.contact.email}?subject=${emailSubject}&body=${emailBody}`;
-    setSentStatus('Opening your email client! You can also reach me directly on WhatsApp.');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || 'Could not save inquiry');
+      }
+
+      setSentStatus({
+        type: 'success',
+        text: 'Message saved to MongoDB! Jayasimbu will review your inquiry soon.',
+      });
+      setFormData({
+        name: '',
+        email: '',
+        subject: 'Full Stack Web Development',
+        message: '',
+      });
+    } catch {
+      // Fallback to mailto when static-hosted without backend API
+      const emailSubject = encodeURIComponent(`[Portfolio Inquiry] ${formData.subject} - ${formData.name}`);
+      const emailBody = encodeURIComponent(
+        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      );
+      window.location.href = `mailto:${PROFILE.contact.email}?subject=${emailSubject}&body=${emailBody}`;
+      setSentStatus({
+        type: 'success',
+        text: 'Opened your email client with your inquiry message.',
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -67,7 +102,7 @@ export default function ContactSection({ onOpenResume }: ContactSectionProps) {
             Contact <span className="gradient-text-primary">Me</span>
           </h2>
           <p className="text-sm sm:text-base text-[#e1bfb8] mt-4 max-w-lg mx-auto">
-            Interested in working together? Fill out the form or reach out through any of the channels below.
+            Interested in working together? Send a message directly to my MongoDB inbox or reach out via WhatsApp.
           </p>
         </motion.div>
 
@@ -200,6 +235,16 @@ export default function ContactSection({ onOpenResume }: ContactSectionProps) {
             transition={{ duration: 0.55 }}
           >
             <form onSubmit={handleSubmit} className="glass-card rounded-xl p-7 sm:p-8 space-y-5">
+              <div className="flex items-center justify-between">
+                <span className="font-['Space_Grotesk'] font-semibold text-base text-[#f6ddd8]">
+                  Send an Inquiry
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-['JetBrains_Mono'] text-[#56d9d8] px-2.5 py-1 rounded-full bg-[#56d9d8]/10">
+                  <Database className="w-3 h-3" />
+                  MongoDB Synced
+                </span>
+              </div>
+
               <div>
                 <label
                   htmlFor="name"
@@ -278,15 +323,24 @@ export default function ContactSection({ onOpenResume }: ContactSectionProps) {
 
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-[#ff6b4a] text-[#661000] rounded-full font-semibold hover:opacity-90 transition-opacity text-sm cursor-pointer"
+                disabled={submitting}
+                className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-[#ff6b4a] text-[#661000] rounded-full font-semibold hover:opacity-90 disabled:opacity-60 transition-opacity text-sm cursor-pointer"
               >
-                <Send className="w-4 h-4" />
-                <span>Send Message</span>
+                {submitting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
+                <span>{submitting ? 'Saving to MongoDB...' : 'Send Message'}</span>
               </button>
 
               {sentStatus && (
-                <p className="text-xs font-['JetBrains_Mono'] text-[#56d9d8] text-center pt-1">
-                  {sentStatus}
+                <p
+                  className={`text-xs font-['JetBrains_Mono'] text-center pt-1 ${
+                    sentStatus.type === 'success' ? 'text-[#56d9d8]' : 'text-[#ffb4ab]'
+                  }`}
+                >
+                  {sentStatus.text}
                 </p>
               )}
             </form>

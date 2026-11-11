@@ -7,7 +7,15 @@ import {
   Monitor,
   ArrowUp,
 } from 'lucide-react';
-import { PROFILE } from '@/data/portfolio-data';
+import {
+  PROFILE,
+  PROJECTS,
+  SKILL_CATEGORIES,
+  EXPERIENCE,
+  Project,
+  SkillCategory,
+  ExperienceItem,
+} from '@/data/portfolio-data';
 import Navbar from '@/components/modern/Navbar';
 import HeroSection from '@/components/modern/HeroSection';
 import AboutSection from '@/components/modern/AboutSection';
@@ -29,12 +37,41 @@ export default function Home() {
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
+  const [projects, setProjects] = useState<Project[]>(PROJECTS);
+  const [skillCategories, setSkillCategories] = useState<SkillCategory[]>(SKILL_CATEGORIES);
+  const [experiences, setExperiences] = useState<ExperienceItem[]>(EXPERIENCE);
+
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 400);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Hydrate dynamic portfolio collections from MongoDB when API is available
+  useEffect(() => {
+    let active = true;
+    fetch('/api/portfolio')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!active || !data?.ok) return;
+        if (Array.isArray(data.projects) && data.projects.length > 0) {
+          setProjects(data.projects);
+        }
+        if (Array.isArray(data.skillCategories) && data.skillCategories.length > 0) {
+          setSkillCategories(data.skillCategories);
+        }
+        if (Array.isArray(data.experiences) && data.experiences.length > 0) {
+          setExperiences(data.experiences);
+        }
+      })
+      .catch(() => {
+        // Fallback silently to static portfolio-data.ts when static-hosted
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -72,17 +109,14 @@ export default function Home() {
             transition={{ duration: 0.4 }}
             className="relative"
           >
-            {/* Subtle Ambient Grid */}
             <div className="fixed inset-0 grid-bg opacity-40 pointer-events-none" />
 
-            {/* Navigation Bar */}
             <Navbar
               onOpenResume={() => setIsResumeOpen(true)}
               isOsMode={isOsMode}
               onToggleOsMode={() => setIsOsMode(true)}
             />
 
-            {/* Main Portfolio Sections */}
             <main className="relative z-10">
               <HeroSection onOpenResume={() => setIsResumeOpen(true)} />
 
@@ -90,10 +124,10 @@ export default function Home() {
               <AboutSection />
 
               <div className="section-divider max-w-7xl mx-auto" />
-              <SkillsSection />
+              <SkillsSection skillCategories={skillCategories} />
 
               <div className="section-divider max-w-7xl mx-auto" />
-              <ProjectsSection />
+              <ProjectsSection projects={projects} />
 
               <div className="section-divider max-w-7xl mx-auto" />
               <AIPlaygroundSection />
@@ -102,7 +136,7 @@ export default function Home() {
               <ServicesSection />
 
               <div className="section-divider max-w-7xl mx-auto" />
-              <ExperienceSection />
+              <ExperienceSection experiences={experiences} />
 
               <div className="section-divider max-w-7xl mx-auto" />
               <EducationSection />

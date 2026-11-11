@@ -2,9 +2,13 @@
 
 import { motion } from 'framer-motion';
 import { Calendar, CheckCircle2 } from 'lucide-react';
-import { EXPERIENCE } from '@/data/portfolio-data';
+import { EXPERIENCE, ExperienceItem } from '@/data/portfolio-data';
 
-export default function ExperienceSection() {
+interface ExperienceSectionProps {
+  experiences?: ExperienceItem[];
+}
+
+export default function ExperienceSection({ experiences = EXPERIENCE }: ExperienceSectionProps) {
   return (
     <section id="experience" className="py-20 lg:py-28 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -25,9 +29,9 @@ export default function ExperienceSection() {
         </motion.div>
 
         <div className="max-w-3xl mx-auto space-y-6">
-          {EXPERIENCE.map((exp) => (
+          {experiences.map((exp) => (
             <motion.div
-              key={exp.company}
+              key={`${exp.company}-${exp.period}`}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

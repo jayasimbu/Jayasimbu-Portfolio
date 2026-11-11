@@ -13,9 +13,13 @@ import {
   Sparkles,
   type LucideIcon,
 } from 'lucide-react';
-import { SKILL_CATEGORIES } from '@/data/portfolio-data';
+import { SKILL_CATEGORIES, SkillCategory } from '@/data/portfolio-data';
 
-export default function SkillsSection() {
+interface SkillsSectionProps {
+  skillCategories?: SkillCategory[];
+}
+
+export default function SkillsSection({ skillCategories = SKILL_CATEGORIES }: SkillsSectionProps) {
   const [activeCategory, setActiveCategory] = useState<string>('All');
 
   const categoryIcons: Record<string, LucideIcon> = {
@@ -34,12 +38,12 @@ export default function SkillsSection() {
     { iconBg: 'bg-[#56d9d8]/10 text-[#56d9d8]', bar: 'bg-[#56d9d8]', text: 'text-[#56d9d8]' },
   ];
 
-  const categories = ['All', ...SKILL_CATEGORIES.map((c) => c.name)];
+  const categories = ['All', ...skillCategories.map((c) => c.name)];
 
   const displayedCategories =
     activeCategory === 'All'
-      ? SKILL_CATEGORIES
-      : SKILL_CATEGORIES.filter((c) => c.name === activeCategory);
+      ? skillCategories
+      : skillCategories.filter((c) => c.name === activeCategory);
 
   return (
     <section id="skills" className="py-20 lg:py-28 relative overflow-hidden">
